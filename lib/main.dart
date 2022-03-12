@@ -28,18 +28,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double? firstNumber;
-  double? secondNumber;
+  num? firstNumber;
+  num? secondNumber;
   String? operator;
+  String? firstNumberString;
 
-  void tapNumber(double tappedNumber) {
-    if (firstNumber == null || (firstNumber != null && operator == null)) {
+  void tapNumber(int tappedNumber) {
+    if (firstNumber == null ) {
       firstNumber = tappedNumber;
     } else if (firstNumber != null && operator == null) {
-      firstNumber = tappedNumber;
-    } else if (firstNumber != null && operator != null) {
+      firstNumberString = (firstNumber.toString() + tappedNumber.toString());
+      firstNumber = num.parse(firstNumberString!);
+    } else if (firstNumber != null && operator != null && secondNumber == null) {
       secondNumber = firstNumber;
       firstNumber = tappedNumber;
+    }else if(firstNumber != null && operator != null && secondNumber != null){
+      firstNumberString = (firstNumber.toString() + tappedNumber.toString());
+      firstNumber = num.parse(firstNumberString!);
     }
     setState(() {});
   }
@@ -50,12 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void allClear(double tapAC) {
-    firstNumber = tapAC;
-    if (firstNumber == tapAC) {
-      firstNumber = null;
-    }
-    ;
+  void allClear() {
+    firstNumber = null;
+    secondNumber = null;
+    operator = null;
     setState(() {});
   }
 
@@ -68,14 +71,24 @@ class _MyHomePageState extends State<MyHomePage> {
     if (operator != null && firstNumber != null && secondNumber != null) {
       if (operator == 'x') {
         firstNumber = (firstNumber! * secondNumber!);
+        operator = null;
+        secondNumber = null;
       } else if (operator == '÷') {
         firstNumber = (secondNumber! / firstNumber!);
+        operator = null;
+        secondNumber = null;
       } else if (operator == '+') {
         firstNumber = (firstNumber! + secondNumber!);
+        operator = null;
+        secondNumber = null;
       } else if (operator == '%') {
         firstNumber = (secondNumber! / 100 * firstNumber!);
+        operator = null;
+        secondNumber = null;
       } else {
         firstNumber = (secondNumber! - firstNumber!);
+        operator = null;
+        secondNumber = null;
       }
     }
     setState(() {});
@@ -115,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              allClear(0);
+                              allClear();
                             },
                             child: Padding(
                                 padding: EdgeInsets.all(3),
